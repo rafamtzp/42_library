@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+int sizecalc(int n);
+int isnegative(int n);
+
+char *ft_itoa(int n)
+{
+    unsigned int num;
+    int i;
+    char *str;
+
+    if (n == 0)
+        return ("0");
+    str = malloc(sizecalc(n) + isnegative(n) + 1);
+    if (str == 0)
+        return (0);
+    if (isnegative(n) == 1)
+    {
+        num = -n;
+        str[0] = '-';
+    }
+    else
+        num = n;
+    str[sizecalc(n) + isnegative(n)] = '\0';
+    i = 1 - isnegative(n);
+    while (num > 0)
+    {
+        str[sizecalc(n) - i] = num % 10 + '0';
+        num = num / 10;
+        i++;
+    }
+    return (str);
+}
+
+int sizecalc(int n)
+{
+    int size;
+    unsigned int temp_n;
+
+    if (n < 0)
+        temp_n = -n;
+    else if (n > 0)
+        temp_n = n;
+    else
+        return (1);
+    size = 0;
+    while (temp_n > 0)
+    {
+        temp_n = temp_n / 10;
+        size++;
+    }
+    return (size);
+}
+
+int isnegative(int n)
+{
+    if (n < 0)
+        return (1);
+    else
+        return (0);
+}
+
+int main(void)
+{
+    printf("%s\n", ft_itoa(-948376));
+}
