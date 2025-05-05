@@ -1,27 +1,40 @@
-char *ft_strrchr(const char *s, int c)
-{
-    char *ptr;
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/02 20:57:34 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/02 20:58:09 by ramarti2         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-    ptr = 0;
-    while (*s)
-    {
-        if (*s == c)
-            ptr = (char *)s;
-        s++;
-    }
-    if (c == '\0')
-    {
-        ptr = (char *)s;
-        return (ptr);
-    }
-    return (ptr);
+char	*ft_strrchr(const char *s, int c)
+{
+	char	*ptr;
+
+	ptr = 0;
+	while (*s)
+	{
+		if (*s == c)
+			ptr = (char *)s;
+		s++;
+	}
+	if (c == '\0')
+	{
+		ptr = (char *)s;
+		return (ptr);
+	}
+	return (ptr);
 }
 
+/*
 #include <stdio.h>
-int main(void)
+int	main(void)
 {
-    char *s = "helloh";
-    char c = 'w';
+	char *s = "helloh";
+	char c = 'w';
 
-    printf("s: %p, c in s: %p\n", s, ft_strrchr(s, c));
-}
+	printf("s: %p, c in s: %p\n", s, ft_strrchr(s, c));
+}*/
