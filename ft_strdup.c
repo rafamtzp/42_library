@@ -1,62 +1,36 @@
-#include <stddef.h>
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/02 21:09:20 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/02 21:09:21 by ramarti2         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-size_t	ft_strlen(const char *s);
-void *ft_memcpy(void *dest, const void *src, size_t n);
+#include "libft.h"
 
-char *ft_strdup(const char *s)
+char	*ft_strdup(const char *s)
 {
-    char *ptr;
-    size_t len;
+	char	*ptr;
+	size_t	len;
 
-    len = ft_strlen(s);
-
-    ptr = malloc(len + 1);
-    if (ptr == 0)
-        return (0);
-    
-    ft_memcpy(ptr, s, len + 1);
-
-    return (ptr);
+	len = ft_strlen(s);
+	ptr = malloc(len + 1);
+	if (ptr == 0)
+		return (0);
+	ft_memcpy(ptr, s, len + 1);
+	return (ptr);
 }
-
-void *ft_memcpy(void *dest, const void *src, size_t n)
-{
-    size_t i;
-    unsigned char *ptr1;
-    unsigned char *ptr2;
-
-    ptr1 = (unsigned char *)src;
-    ptr2 = (unsigned char *)dest;
-    i = 0;
-    while (i < n)
-    {
-        *ptr2 = *ptr1;
-        ptr1++;
-        ptr2++;
-        i++;
-    }
-    return (dest);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t		len;
-
-	len = 0;
-	while (*s != '\0')
-	{
-		len++;
-		s++;
-	}
-	return (len);
-}
-
+/*
 #include <stdio.h>
-int main(void)
+
+int	main(void)
 {
-    char *s = "hello, world";
-    char *dest = ft_strdup(s);
-    printf("%s\n", dest);
-    free(dest);
-}
+	char *s = "hello, world";
+	char *dest = ft_strdup(s);
+	printf("%s\n", dest);
+	free(dest);
+}*/

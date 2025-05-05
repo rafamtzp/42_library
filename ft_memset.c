@@ -1,31 +1,44 @@
-#include <stddef.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/02 21:13:06 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/02 21:13:07 by ramarti2         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void *ft_memset(void *s, int c, size_t n)
+#include "libft.h"
+
+void	*ft_memset(void *s, int c, size_t n)
 {
-    size_t i;
-    unsigned char *ptr;
+	size_t			i;
+	unsigned char	*ptr;
 
-    ptr = (unsigned char *)s;
-    i = 0;
-    while (i < n)
-    {
-        *ptr = c;
-        ptr++;
-        i++;
-    }
-    return (s);
+	ptr = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		*ptr = c;
+		ptr++;
+		i++;
+	}
+	return (s);
 }
-
+/*
 #include <stdio.h>
-int main(void)
+
+int	main(void)
 {
-    unsigned int i = 0;
-    size_t n = 4;
-    char s[100];
-    ft_memset(s, 'x', n);
-    while (i < n)
-    {
-        printf("%c\n", s[i]);
-        i++;
-    }
-}
+	unsigned int i = 0;
+	size_t n = 4;
+	char s[100];
+	ft_memset(s, 'x', n);
+	while (i < n)
+	{
+		printf("%c\n", s[i]);
+		i++;
+	}
+}*/

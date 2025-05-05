@@ -3,43 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramarti2 <rafamtz2001@gmail.com>           +#+  +:+       +#+        */
+/*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 16:48:07 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/04/03 16:48:28 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/02 21:05:18 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-/*
-#include <stdio.h>
-size_t ft_strlcpy(char *dest, const char *src, size_t size);
-int main(void)
-{
-    char *src = "helloooooo";
-    char dest[100];
-    unsigned int n = 5;
-
-    unsigned int len = ft_strlcpy(dest, src, n);
-    printf("This function tried copying %i chars from src.\n", len);
-    for (unsigned int i = 0; i < n; i++)
-    {
-        if (dest[i] != '\0')
-        {
-            printf("%c\n", dest[i]);
-        }
-        else if (dest[i] == '\0')
-        {
-            printf("#\n");
-        }
-    }
-}*/
+#include "libft.h"
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	unsigned int	n;
 	unsigned int	len;
-	const char			*initial;
+	const char		*initial;
 
 	initial = src;
 	len = 0;
@@ -62,3 +39,27 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	*dst = '\0';
 	return (len);
 }
+/*
+#include <stdio.h>
+
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+int	main(void)
+{
+	char *src = "helloooooo";
+	char dest[100];
+	unsigned int n = 5;
+
+	unsigned int len = ft_strlcpy(dest, src, n);
+	printf("This function tried copying %i chars from src.\n", len);
+	for (unsigned int i = 0; i < n; i++)
+	{
+		if (dest[i] != '\0')
+		{
+			printf("%c\n", dest[i]);
+		}
+		else if (dest[i] == '\0')
+		{
+			printf("#\n");
+		}
+	}
+}*/
