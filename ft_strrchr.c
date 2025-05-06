@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:57:34 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/02 20:58:09 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/05 21:18:52 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ char	*ft_strrchr(const char *s, int c)
 	ptr = 0;
 	while (*s)
 	{
-		if (*s == c)
+		if (*s == (char)c)
 			ptr = (char *)s;
 		s++;
 	}
-	if (c == '\0')
+	if ((char)c == '\0')
 	{
 		ptr = (char *)s;
 		return (ptr);

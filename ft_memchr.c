@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 19:58:47 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/05 19:58:57 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/05 21:55:05 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*ft_memchr(const void *s, int c, size_t n)
 	i = 0;
 	while (i < n)
 	{
-		if (*cursor == c)
+		if (*cursor == (unsigned char)c)
 		{
 			ptr = cursor;
 			return (ptr);

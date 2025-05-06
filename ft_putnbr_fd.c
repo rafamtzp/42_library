@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 21:11:13 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/02 21:11:25 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:22:15 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,8 @@ void	ft_putnbr_fd(int n, int fd)
 		else
 			num = n;
 		i = size - 1;
-		while (i > 0)
-		{
+		while (i--)
 			num = num / 10;
-			i--;
-		}
 		num = num % 10 + '0';
 		write(fd, &num, 1);
 		size--;

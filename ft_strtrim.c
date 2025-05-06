@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:56:47 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/02 21:01:42 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:35:00 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 
 	start = startfind(s1, set);
 	end = endfind(s1, set, start);
+	if (start == 0 || end == 0)
+		return (0);
 	len = 0;
 	while (&start[len] != end)
 		len++;
