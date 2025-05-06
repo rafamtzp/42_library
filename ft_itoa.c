@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:00:02 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/05 20:00:03 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:27:54 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ char	*ft_itoa(int n)
 	int				i;
 	char			*str;
 
-	if (n == 0)
-		return ("0");
 	str = malloc(sizecalc(n) + isnegative(n) + 1);
 	if (str == 0)
 		return (0);
@@ -35,6 +33,8 @@ char	*ft_itoa(int n)
 		num = n;
 	str[sizecalc(n) + isnegative(n)] = '\0';
 	i = 1 - isnegative(n);
+	if (num == 0)
+		str[0] = '0';
 	while (num > 0)
 	{
 		str[sizecalc(n) - i] = num % 10 + '0';
