@@ -6,16 +6,15 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:56:47 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/06 19:35:00 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:12:30 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char const	*startfind(char const *s1, char const *set);
-char const	*endfind(char const *s1, char const *set, char const *start);
-size_t		ft_strlen(const char *s);
-char		*ft_substr(char const *s, unsigned int start, size_t len);
+static char const	*startfind(char const *s1, char const *set);
+static char const	*endfind(char const *s1, char const *set,
+						char const *start);
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
@@ -24,16 +23,16 @@ char	*ft_strtrim(char const *s1, char const *set)
 	char const	*end;
 
 	start = startfind(s1, set);
+	if (*start == '\0')
+		return (ft_substr(start, 0, 0));
 	end = endfind(s1, set, start);
-	if (start == 0 || end == 0)
-		return (0);
 	len = 0;
 	while (&start[len] != end)
 		len++;
 	return (ft_substr(start, 0, len + 1));
 }
 
-char const	*startfind(char const *s1, char const *set)
+static char const	*startfind(char const *s1, char const *set)
 {
 	int	i;
 	int	j;
@@ -48,10 +47,10 @@ char const	*startfind(char const *s1, char const *set)
 			return (&s1[i]);
 		i++;
 	}
-	return (0);
+	return (&s1[i]);
 }
 
-char const	*endfind(char const *s1, char const *set, char const *start)
+static char const	*endfind(char const *s1, char const *set, char const *start)
 {
 	int	i;
 	int	j;
@@ -66,45 +65,15 @@ char const	*endfind(char const *s1, char const *set, char const *start)
 			return (&s1[i]);
 		i--;
 	}
-	return (0);
-}
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (*s != '\0')
-	{
-		len++;
-		s++;
-	}
-	return (len);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*sub;
-	size_t	i;
-
-	sub = malloc(len + 1);
-	if (sub == 0)
-		return (0);
-	i = start;
-	while (s[i] != '\0' && (i - start) < len)
-	{
-		sub[i - start] = s[i];
-		i++;
-	}
-	sub[i - start] = '\0';
-	return (sub);
+	return (&s1[i]);
 }
 /*
 #include <stdio.h>
+
 int	main(void)
 {
-	char const *s = "tgytygtygyhello, worldgyyygytygyty";
-	char const *set = "gty";
+	char const *s = "aa";
+	char const *set = "a";
 
 	printf("%s\n", ft_strtrim(s, set));
 }*/

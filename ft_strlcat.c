@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 21:05:52 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/06 19:06:18 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/07 13:15:19 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,31 @@
 
 size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	size_t	dstlen;
 	size_t	srclen;
-	size_t	limit;
+	size_t	dstlen;
+	size_t	i;
 
+	srclen = ft_strlen(src);
 	dstlen = 0;
-	while (*(dst++) && dstlen < size)
-		dstlen++;
-	srclen = 0;
-	while (*(src++))
-		srclen++;
-	if (size <= dstlen + 1)
-		return (srclen + dstlen);
-	limit = size - dstlen - 1;
-	while (*src && srclen < limit)
+	i = 0;
+	while (dst[i] && i < size)
 	{
-		*dst = *src;
-		dst++;
-		src++;
+		dstlen++;
+		i++;
 	}
-	*dst = '\0';
+	if (dst[i] || size == 0)
+		return (size + srclen);
+	while (i < size - 1 && *src)
+	{
+		dst[i] = *src;
+		src++;
+		i++;
+	}
+	dst[i] = '\0';
 	return (srclen + dstlen);
 }
+// if strlcat traverses size chars without finding NUL,
+	//length of the string is size
 /*
 #include <stdio.h>
 

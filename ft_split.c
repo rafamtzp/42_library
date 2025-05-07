@@ -6,13 +6,13 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:00:18 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/02 21:09:48 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:53:37 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-unsigned int	wordlen(char const *s, char c)
+static unsigned int	wordlen(char const *s, char c)
 {
 	unsigned int	len;
 
@@ -25,7 +25,7 @@ unsigned int	wordlen(char const *s, char c)
 	return (len);
 }
 
-unsigned int	wordcounter(char const *s, char c)
+static unsigned int	wordcounter(char const *s, char c)
 {
 	unsigned int	wordcount;
 	int				firstfound;
@@ -46,7 +46,7 @@ unsigned int	wordcounter(char const *s, char c)
 	return (wordcount);
 }
 
-char	**kill(char **split, int i)
+static char	**kill(char **split, int i)
 {
 	while (i >= 0)
 		free(split[i--]);
@@ -54,7 +54,7 @@ char	**kill(char **split, int i)
 	return (0);
 }
 
-char	**splitfill(char **split, char const *s, char c)
+static char	**splitfill(char **split, char const *s, char c)
 {
 	unsigned int	i;
 	unsigned int	len;
@@ -86,7 +86,7 @@ char	**ft_split(char const *s, char c)
 	char			**split;
 
 	wordcount = wordcounter(s, c);
-	split = malloc(wordcount * 8);
+	split = malloc(wordcount * sizeof(char *));
 	if (split == 0)
 		return (0);
 	split = splitfill(split, s, c);
