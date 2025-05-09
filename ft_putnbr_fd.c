@@ -6,13 +6,13 @@
 /*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 21:11:13 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/06 19:22:15 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/08 21:19:09 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	sizecalc(int n)
+static int	sizecalc(int n)
 {
 	int				size;
 	unsigned int	temp_n;
@@ -32,7 +32,7 @@ int	sizecalc(int n)
 	return (size);
 }
 
-int	isnegative(int n)
+static int	isnegative(int n)
 {
 	if (n < 0)
 		return (1);

@@ -1,43 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 20:50:11 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/09 18:07:22 by ramarti2         ###   ########.fr       */
+/*   Created: 2025/05/08 23:13:14 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/09 19:45:40 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	void		*ptr;
-	long long	result;
+	t_list	*newlst;
+	t_list	*newnode;
+	void	*newcontent;
 
-	if (nmemb != 0 && size != 0)
+	if (lst == 0 || f == 0 || del == 0)
+		return (lst);
+	newlst = 0;
+	while (lst != 0)
 	{
-		result = nmemb * size;
-		if (nmemb != result / size)
+		newcontent = f(lst->content);
+		newnode = ft_lstnew(newcontent);
+		if (newnode == 0)
+		{
+			del(newcontent);
+			ft_lstclear(&newlst, del);
 			return (0);
+		}
+		ft_lstadd_back(&newlst, newnode);
+		lst = lst->next;
 	}
-	ptr = malloc(nmemb * size);
-	if (ptr == 0)
-		return (0);
-	if (nmemb * size == 0)
-		return (ptr);
-	ft_bzero(ptr, nmemb * size);
-	return (ptr);
+	return (newlst);
 }
-/*
-#include <stdio.h>
-
-int	main(void)
-{
-	int *arr = ft_calloc(5, 4);
-	for (int i = 0; i < 5; i++)
-		printf("%i\n", arr[i]);
-	free(arr);
-}*/

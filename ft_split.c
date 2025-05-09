@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 18:00:18 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/07 17:53:37 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:48:58 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,27 @@ static unsigned int	wordcounter(char const *s, char c)
 	return (wordcount);
 }
 
-static char	**kill(char **split, int i)
+static void	kill(char **split, int i)
 {
 	while (i >= 0)
 		free(split[i--]);
 	free(split);
-	return (0);
 }
 
-static char	**splitfill(char **split, char const *s, char c)
+static char	**splitfill(char **split, char const *s, char c,
+		unsigned int wordcount)
 {
 	unsigned int	i;
 	unsigned int	len;
 
 	i = 0;
-	while (*s)
+	while (*s && i < wordcount)
 	{
 		len = wordlen(s, c);
 		if (len > 0)
 		{
 			split[i] = malloc(len + 1);
-			if (split == 0)
+			if (split[i] == 0)
 			{
 				kill(split, i);
 				return (0);
@@ -77,6 +77,7 @@ static char	**splitfill(char **split, char const *s, char c)
 		}
 		s++;
 	}
+	split[wordcount] = 0;
 	return (split);
 }
 
@@ -86,14 +87,15 @@ char	**ft_split(char const *s, char c)
 	char			**split;
 
 	wordcount = wordcounter(s, c);
-	split = malloc(wordcount * sizeof(char *));
+	split = malloc((wordcount + 1) * sizeof(char *));
 	if (split == 0)
 		return (0);
-	split = splitfill(split, s, c);
+	split = splitfill(split, s, c, wordcount);
 	return (split);
 }
 /*
 #include <stdio.h>
+
 int	main(void)
 {
 	char **split = ft_split("hello, world. How are you?", ' ');
