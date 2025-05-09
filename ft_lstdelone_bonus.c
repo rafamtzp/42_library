@@ -1,40 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 21:14:13 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/09 18:39:45 by ramarti2         ###   ########.fr       */
+/*   Created: 2025/05/08 21:11:51 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/09 13:11:17 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-	unsigned char	*s;
-	unsigned char	*d;
-
-	s = (unsigned char *)src;
-	d = (unsigned char *)dest;
-	if (s < d && d < s + n)
-	{
-		while (n--)
-			d[n] = s[n];
-	}
-	else
-		ft_memcpy(dest, src, n);
-	return (dest);
+	del(lst->content);
+	free(lst);
 }
-/*
-#include <stdio.h>
-
-int	main(void)
-{
-	char src[100] = "hello, world";
-	printf("%s\n", src);
-	ft_memmove(src + 7, src, 13);
-	printf("%s\n", src);
-}*/

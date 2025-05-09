@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 21:16:16 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/02 21:16:21 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/09 18:37:53 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	unsigned char	*ptr1;
 	unsigned char	*ptr2;
 
+	if (dest == 0 && src == 0 && n > 0)
+		return (0);
 	ptr1 = (unsigned char *)src;
 	ptr2 = (unsigned char *)dest;
 	i = 0;

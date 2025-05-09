@@ -1,40 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 21:14:13 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/09 18:39:45 by ramarti2         ###   ########.fr       */
+/*   Created: 2025/05/08 22:48:23 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/09 17:46:12 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	unsigned char	*s;
-	unsigned char	*d;
+	t_list	*ptr1;
+	t_list	*ptr2;
 
-	s = (unsigned char *)src;
-	d = (unsigned char *)dest;
-	if (s < d && d < s + n)
+	if (lst == 0 || del == 0 || *lst == 0)
+		return ;
+	ptr1 = *lst;
+	while (ptr1->next != 0)
 	{
-		while (n--)
-			d[n] = s[n];
+		ptr2 = ptr1->next;
+		ft_lstdelone(ptr1, del);
+		ptr1 = ptr2;
 	}
-	else
-		ft_memcpy(dest, src, n);
-	return (dest);
+	ft_lstdelone(ptr1, del);
+	*lst = 0;
+	lst = 0;
 }
-/*
-#include <stdio.h>
-
-int	main(void)
-{
-	char src[100] = "hello, world";
-	printf("%s\n", src);
-	ft_memmove(src + 7, src, 13);
-	printf("%s\n", src);
-}*/
