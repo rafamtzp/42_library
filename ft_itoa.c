@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ramarti2 <ramarti2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 20:00:02 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/06 19:27:54 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/12 10:38:55 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		sizecalc(int n);
-int		isnegative(int n);
+static int		sizecalc(int n);
+static int		isnegative(int n);
 
 char	*ft_itoa(int n)
 {
@@ -44,7 +44,7 @@ char	*ft_itoa(int n)
 	return (str);
 }
 
-int	sizecalc(int n)
+static int	sizecalc(int n)
 {
 	int				size;
 	unsigned int	temp_n;
@@ -64,7 +64,7 @@ int	sizecalc(int n)
 	return (size);
 }
 
-int	isnegative(int n)
+static int	isnegative(int n)
 {
 	if (n < 0)
 		return (1);
