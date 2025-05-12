@@ -6,15 +6,14 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 20:31:50 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/09 17:45:27 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:04:59 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
-# define LIBFT_H
-
 # include <stdlib.h>
 # include <unistd.h>
+# define LIBFT_H
 
 typedef struct s_list
 {

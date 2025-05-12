@@ -1,6 +1,4 @@
-# Has to use NAME, clean, fclean, re
-# objetivo : dependencias
-#	instrucciones
+
 NAME = libft.a
 
 CC = cc
@@ -24,7 +22,7 @@ all : $(NAME)
 $(NAME) : $(OBJ)
 	ar r $@ $^
 
-bonus : $(OBJ_BONUS) $(OBJ)
+bonus : $(OBJ_BONUS)
 	ar -r $(NAME) $^
 
 %.o : %.c
