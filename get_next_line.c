@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 0
+#endif
 size_t	ft_strlen(const char *s)
 {
 	size_t	len;
@@ -149,26 +152,26 @@ char *get_next_line(int fd)
 	static char *left_c;
 	char	*linebuf;
 
+	static int left_c_init = 0;
+	static int eoffound = 0;
+	if (left_c_init == 0) // is this right?  What is left_c by default?
+	{
+		left_c = "";
+		left_c_init = 1;
+	}
 	linebuf = appendbufs(left_c, fd);
-	if (left_c == 0)
+	if (linebuf == 0) //changed from left_c == 0
 		return (0);
-	
+	if (ft_strchr(linebuf, '\0') < &linebuf[sizeof(linebuf)])
+		eoffound = 1;
 	left_c = setline(linebuf);
 	if (left_c == 0)
 		return (0);
-	
+	if (eoffound == 1) // there are still issues with valgrind :(
+		free(left_c);
 	return (linebuf);
 	// if \0 is found, free leftchars (right before return) (what was this????????)
 }
-// TOFIX: consider case where end of file comes early.  That is, when buffersize too large!!!!
-
-// use strjoin
-// ssize_t read(int fd, void *buf, size_t nbyte)
-// returns the number of bytes read. Otherwise, -1
-// always reads starting from the offset in the file (if supported)
-
-
-// PREGUNTA: para qué la variable estatica?????
 
 // -D BUFFER_SIZE=xx determina el tamaño del buffer de las lecturas del gnl
 #include <fcntl.h>
@@ -176,5 +179,7 @@ char *get_next_line(int fd)
 int main(void)
 {
 	int fd = open("file.txt", O_RDONLY);
-	printf("%s\n", get_next_line(fd));
+	for (int i = 0; i < 3; i++)
+		printf("%s", get_next_line(fd));
+	close(fd);
 }
