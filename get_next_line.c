@@ -2,7 +2,7 @@
 #include <unistd.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 0
+#define BUFFER_SIZE 1
 #endif
 size_t	ft_strlen(const char *s)
 {
@@ -92,15 +92,16 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-char *appendbufs(char *left_c, int fd)
+char *appendbufs(char *left_c, int fd, int *eoffoundptr)
 {
 	char *buffer;
+	char *tmp;
 	int foundending;
 	int	bytesread;
 
 	// read BUFFER_SIZE chars in a loop until \n or \0 is found
 	foundending = 0;
-	while (foundending == 0)
+	while (foundending == 0 && *eoffoundptr == 0)
 	{
 		buffer = malloc(BUFFER_SIZE + 1);
 		if (buffer == 0)
@@ -110,14 +111,23 @@ char *appendbufs(char *left_c, int fd)
 		if (bytesread == -1)
 			return (0);
 		// if there is another null char besides the terminator or a newline,
-		else if (ft_strchr(buffer, '\0') < &buffer[BUFFER_SIZE] || ft_strchr(buffer, '\n') != 0) 
-			foundending = 1; // realloc if first case so intermediate '\0' at the end
+		else if (bytesread == 0)
+			*eoffoundptr = 1;
+		else if (ft_strchr(buffer, '\n') != 0)
+			foundending = 1;
 		// copy each buffer read into left_c
 		if (*left_c != '\0') // if non-empty
+		{
+			tmp = left_c; // tmp = old_left_c
 			//append each buffer
-			left_c = (char *)ft_strjoin(left_c, buffer);
+			left_c = (char *)ft_strjoin(tmp, buffer);
+			free(tmp);  // free old left_c
+		}
 		else // if empty, assign to buffer.
+		{
+			free(left_c); // free old left_c
 			left_c = ft_strdup(buffer);
+		}
 		free(buffer);
 	}
 	return (left_c);
@@ -141,7 +151,7 @@ char *setline(char *linebuf)
 	}
 	// if at terminator, then eof reached and no leftovers. return empty string
 	else
-		left_c = "\0";
+		left_c = ft_strdup("");
 	// find \n and put a \0 after it
 	*cursor = '\0';
 	return (left_c);
@@ -154,32 +164,40 @@ char *get_next_line(int fd)
 
 	static int left_c_init = 0;
 	static int eoffound = 0;
-	if (left_c_init == 0) // is this right?  What is left_c by default?
+	if (eoffound == 1)
+		return (0);
+	if (left_c_init == 0)
 	{
-		left_c = "";
+		left_c = ft_strdup("");
 		left_c_init = 1;
 	}
-	linebuf = appendbufs(left_c, fd);
+	linebuf = appendbufs(left_c, fd, &eoffound);
 	if (linebuf == 0) //changed from left_c == 0
 		return (0);
-	if (ft_strchr(linebuf, '\0') < &linebuf[sizeof(linebuf)])
-		eoffound = 1;
-	left_c = setline(linebuf);
+	left_c = setline(linebuf);  // returns leftovers
 	if (left_c == 0)
 		return (0);
-	if (eoffound == 1) // there are still issues with valgrind :(
+	if (*left_c == '\0') // if left_c is empty
+	{
+		left_c_init = 0; // set this to 0 so that next time we call it, it reinitializes it if not, then it's free
 		free(left_c);
+	}
 	return (linebuf);
 	// if \0 is found, free leftchars (right before return) (what was this????????)
 }
 
-// -D BUFFER_SIZE=xx determina el tamaño del buffer de las lecturas del gnl
+// had to reassign left_c to known values using strdup bc I free it later on and so must be malloc'd always
 #include <fcntl.h>
 #include <stdio.h>
 int main(void)
 {
+	char *linebuf;
 	int fd = open("file.txt", O_RDONLY);
-	for (int i = 0; i < 3; i++)
-		printf("%s", get_next_line(fd));
+	for (int i = 0; i < 11; i++)
+	{
+		linebuf = get_next_line(fd);
+		printf("%s", linebuf);
+		free(linebuf);
+	}
 	close(fd);
 }
