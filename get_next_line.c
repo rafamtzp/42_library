@@ -1,169 +1,129 @@
-#include <stdlib.h>
-#include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 15:11:01 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/29 19:08:56 by ramarti2         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE 1
-#endif
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
+#include "get_next_line.h"
 
-	len = 0;
-	while (*s != '\0')
-	{
-		len++;
-		s++;
-	}
-	return (len);
-}
-
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+static  void	ft_bzero(void *s, size_t n)
 {
 	size_t			i;
-	unsigned char	*ptr1;
-	unsigned char	*ptr2;
+	unsigned char	*ptr;
 
-	if (dest == 0 && src == 0 && n > 0)
-		return (0);
-	ptr1 = (unsigned char *)src;
-	ptr2 = (unsigned char *)dest;
+	ptr = (unsigned char *)s;
 	i = 0;
 	while (i < n)
 	{
-		*ptr2 = *ptr1;
-		ptr1++;
-		ptr2++;
+		*ptr = '\0';
+		ptr++;
 		i++;
 	}
-	return (dest);
 }
 
-char	*ft_strdup(const char *s)
+static void	*ft_calloc(size_t nmemb, size_t size)
 {
-	char	*ptr;
-	size_t	len;
+	void		*ptr;
+	long long	result;
 
-	len = ft_strlen(s);
-	ptr = malloc(len + 1);
+	if (nmemb != 0 && size != 0)
+	{
+		result = nmemb * size;
+		if (nmemb != result / size)
+			return (0);
+	}
+	ptr = malloc(nmemb * size);
 	if (ptr == 0)
 		return (0);
-	ft_memcpy(ptr, s, len + 1);
+	if (nmemb * size == 0)
+		return (ptr);
+	ft_bzero(ptr, nmemb * size);
 	return (ptr);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+static void	*freebufs(int freeleft_c, int freebuffer, char *left_c, char *buffer)
 {
-	char	*s3;
-	int		i;
-	int		j;
-
-	s3 = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (s3 == 0)
-		return (0);
-	i = 0;
-	while (s1[i] != '\0')
-	{
-		s3[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (s2[j] != '\0')
-	{
-		s3[i + j] = s2[j];
-		j++;
-	}
-	s3[i + j] = '\0';
-	return (s3);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	char	*ptr;
-
-	ptr = (char *)s;
-	while (*ptr)
-	{
-		if (*ptr == (char)c)
-			return (ptr);
-		ptr++;
-	}
-	if ((char)c == '\0')
-		return (ptr);
+	if (freebuffer == 1 && buffer != 0)
+		free(buffer);
+	if (freeleft_c == 1 && left_c != 0)
+		free(left_c);
 	return (0);
 }
-
-char *appendbufs(char *left_c, int fd, int *eoffoundptr)
+static char	*append_to_left_c(char *left_c, char *buffer)
 {
-	char *buffer;
-	char *tmp;
-	int foundending;
-	int	bytesread;
+	char	*tmp;
 
-	// read BUFFER_SIZE chars in a loop until \n or \0 is found
+	if (*left_c != '\0')
+	{
+		tmp = left_c;
+		left_c = (char *)ft_strjoin(tmp, buffer);
+		free(tmp);
+	}
+	else
+	{
+		free(left_c);
+		left_c = ft_strdup(buffer);
+	}
+	return (left_c);
+}
+
+static char	*appendbufs(char *left_c, int fd, int *eoffoundptr)
+{
+	char	*buffer;
+	int		foundending;
+	int		bytesread;
+
 	foundending = 0;
 	while (foundending == 0 && *eoffoundptr == 0)
 	{
-		buffer = malloc(BUFFER_SIZE + 1);
+		buffer = ft_calloc(1, BUFFER_SIZE + 1);
 		if (buffer == 0)
-			return (0);
-		buffer[BUFFER_SIZE] = '\0';
+			return (freebufs(1, 0, left_c, buffer));
 		bytesread = read(fd, buffer, BUFFER_SIZE);
 		if (bytesread == -1)
-			return (0);
-		// if there is another null char besides the terminator or a newline,
+			return (freebufs(1, 1, left_c, buffer));
 		else if (bytesread == 0)
 			*eoffoundptr = 1;
 		else if (ft_strchr(buffer, '\n') != 0)
 			foundending = 1;
-		// copy each buffer read into left_c
-		if (*left_c != '\0') // if non-empty
-		{
-			tmp = left_c; // tmp = old_left_c
-			//append each buffer
-			left_c = (char *)ft_strjoin(tmp, buffer);
-			free(tmp);  // free old left_c
-		}
-		else // if empty, assign to buffer.
-		{
-			free(left_c); // free old left_c
-			left_c = ft_strdup(buffer);
-		}
+		left_c = append_to_left_c(left_c, buffer);
 		free(buffer);
 	}
 	return (left_c);
 }
 
-char *setline(char *linebuf)
+static char	*setline(char *linebuf)
 {
-	char *cursor;
-	char *left_c;
+	char	*cursor;
+	char	*left_c;
 
 	cursor = linebuf;
-	// store remainder in left_c:
-	// 1. move linebuf cursor until \n or \0
 	while (*cursor != '\n' && *cursor != '\0')
 		cursor++;
-	// if in newline, move to one after it and store leftovers in left_c
 	if (*cursor == '\n')
 	{
 		cursor++;
 		left_c = ft_strdup(cursor);
 	}
-	// if at terminator, then eof reached and no leftovers. return empty string
 	else
 		left_c = ft_strdup("");
-	// find \n and put a \0 after it
 	*cursor = '\0';
 	return (left_c);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static char *left_c;
-	char	*linebuf;
+	static char	*left_c;
+	char		*linebuf;
+	static int	left_c_init = 0;
+	static int	eoffound = 0;
 
-	static int left_c_init = 0;
-	static int eoffound = 0;
 	if (eoffound == 1)
 		return (0);
 	if (left_c_init == 0)
@@ -172,32 +132,32 @@ char *get_next_line(int fd)
 		left_c_init = 1;
 	}
 	linebuf = appendbufs(left_c, fd, &eoffound);
-	if (linebuf == 0) //changed from left_c == 0
+	if (linebuf == 0)
 		return (0);
-	left_c = setline(linebuf);  // returns leftovers
+	left_c = setline(linebuf);
 	if (left_c == 0)
 		return (0);
-	if (*left_c == '\0') // if left_c is empty
+	if (*left_c == '\0')
 	{
-		left_c_init = 0; // set this to 0 so that next time we call it, it reinitializes it if not, then it's free
+		left_c_init = 0;
 		free(left_c);
 	}
 	return (linebuf);
-	// if \0 is found, free leftchars (right before return) (what was this????????)
 }
 
-// had to reassign left_c to known values using strdup bc I free it later on and so must be malloc'd always
+/*
 #include <fcntl.h>
 #include <stdio.h>
-int main(void)
+
+int	main(void)
 {
 	char *linebuf;
 	int fd = open("file.txt", O_RDONLY);
-	for (int i = 0; i < 11; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		linebuf = get_next_line(fd);
 		printf("%s", linebuf);
 		free(linebuf);
 	}
 	close(fd);
-}
+}*/
