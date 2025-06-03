@@ -14,9 +14,9 @@
 
 static char	*freebufs(int freeleft, int freebuf, char *leftovers, char *buffer)
 {
-	if (freeleft == 1)
+	if (freeleft == 1 && leftovers != 0)
 		free(leftovers);
-	if (freebuf == 1)
+	if (freebuf == 1 && buffer != 0)
 		free(buffer);
 	return (0);
 }
@@ -53,19 +53,25 @@ static char	*appendbufs(char *leftovers, int fd, int *eofptr)
 	{
 		buffer = ft_calloc(1, BUFFER_SIZE + 1);
 		if (buffer == 0)
-			return (freebufs(1, 1, leftovers, buffer));
+			return (freebufs(1, 0, leftovers, buffer));
 		bytesread = read(fd, buffer, BUFFER_SIZE);
 		if (bytesread == -1)
 			return (freebufs(1, 1, leftovers, buffer));
 		else if (bytesread == 0)
 			*eofptr = 1;
+		// else if (bytesread < BUFFER_SIZE) // maybe this could fix it?
+		// {
+		// 	tmp = buffer;  // maybe ft_substr handles freeing old buffer???
+		// 	buffer = ft_substr(buffer, bytesread + 1);
+		// 	free(tmp);	// maybe ft_substr handles freeing old buffer???????
+		// }
 		if (ft_strchr(buffer, '\n') != 0)
 			nlfound = 1;
 		tmp = leftovers;
-		leftovers = ft_strjoin(leftovers, buffer);
-		if (leftovers == 0)
-			return (freebufs(1, 0, leftovers, buffer));
+		leftovers = ft_strjoin(tmp, buffer);
 		freebufs(1, 1, tmp, buffer);
+		if (leftovers == 0)
+			return (0);
 	}
 	return (leftovers);
 }
