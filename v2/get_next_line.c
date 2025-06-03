@@ -6,11 +6,34 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:11:01 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/30 20:01:19 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/06/03 20:26:07 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*sub;
+	size_t	i;
+
+	if (start + len > ft_strlen(s) && start < ft_strlen(s))
+		len = ft_strlen(s + start);
+	else if (start >= ft_strlen(s))
+		len = 0;
+	sub = ft_calloc(len + 1, 1);
+	if (sub == 0)
+		return (0);
+	i = start;
+	if (len == 0)
+		return (sub);
+	while (s[i] != '\0' && (i - start) < len)
+	{
+		sub[i - start] = s[i];
+		i++;
+	}
+	return (sub);
+}
 
 static char	*freebufs(int freeleft, int freebuf, char *leftovers, char *buffer)
 {
@@ -21,7 +44,7 @@ static char	*freebufs(int freeleft, int freebuf, char *leftovers, char *buffer)
 	return (0);
 }
 
-static char	*setline(char *linebuf)
+static char	*setline(char *linebuf) // not freeing leftovers here properly??
 {
 	char	*cursor;
 	char	*leftovers;
@@ -44,7 +67,7 @@ static char	*setline(char *linebuf)
 static char	*appendbufs(char *leftovers, int fd, int *eofptr)
 {
 	char	*buffer;
-	char	*tmp;
+	char *tmp;
 	int		bytesread;
 	int		nlfound;
 
@@ -59,16 +82,18 @@ static char	*appendbufs(char *leftovers, int fd, int *eofptr)
 			return (freebufs(1, 1, leftovers, buffer));
 		else if (bytesread == 0)
 			*eofptr = 1;
-		// else if (bytesread < BUFFER_SIZE) // maybe this could fix it?
+		// else if (bytesread < BUFFER_SIZE) // maybe this could fix it? Try removing later?
 		// {
-		// 	tmp = buffer;  // maybe ft_substr handles freeing old buffer???
-		// 	buffer = ft_substr(buffer, bytesread + 1);
-		// 	free(tmp);	// maybe ft_substr handles freeing old buffer???????
+		// 	tmp = buffer;
+		// 	buffer = ft_substr(tmp, 0, bytesread + 1);
+		// 	free(tmp);
+		// 	if (buffer == 0)
+		// 		return (freebufs(1, 0, leftovers, buffer));
 		// }
 		if (ft_strchr(buffer, '\n') != 0)
 			nlfound = 1;
 		tmp = leftovers;
-		leftovers = ft_strjoin(tmp, buffer);
+		leftovers = ft_strjoin(leftovers, buffer);
 		freebufs(1, 1, tmp, buffer);
 		if (leftovers == 0)
 			return (0);
@@ -88,6 +113,8 @@ char	*get_next_line(int fd)
 	if (leftoversinit == 0)
 	{
 		leftovers = ft_strdup("");
+		if (leftovers == 0)
+			return (0);
 		leftoversinit = 1;
 	}
 	linebuf = appendbufs(leftovers, fd, &eof);
@@ -95,11 +122,11 @@ char	*get_next_line(int fd)
 		return (0);
 	leftovers = setline(linebuf);
 	if (leftovers == 0)
-		return (0);
-	if (eof == 1)
+		return (freebufs(1, 0, linebuf, leftovers));
+	if (eof == 1 && *leftovers == '\0')
 		free(leftovers);
-	if (eof == 1 && ft_strlen(linebuf) == 0)
-		return (0);
+	// if (eof == 1 && ft_strlen(linebuf) == 0)  // what is this for????????
+	// 	return (0);
 	return (linebuf);
 }
 
