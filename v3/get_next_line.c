@@ -6,34 +6,34 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:11:01 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/06/04 17:48:10 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:41:32 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*sub;
-	size_t	i;
+// char	*ft_substr(char const *s, unsigned int start, size_t len)
+// {
+// 	char	*sub;
+// 	size_t	i;
 
-	if (start + len > ft_strlen(s) && start < ft_strlen(s))
-		len = ft_strlen(s + start);
-	else if (start >= ft_strlen(s))
-		len = 0;
-	sub = ft_calloc(len + 1, 1);
-	if (sub == 0)
-		return (0);
-	i = start;
-	if (len == 0)
-		return (sub);
-	while (s[i] != '\0' && (i - start) < len)
-	{
-		sub[i - start] = s[i];
-		i++;
-	}
-	return (sub);
-}
+// 	if (start + len > ft_strlen(s) && start < ft_strlen(s))
+// 		len = ft_strlen(s + start);
+// 	else if (start >= ft_strlen(s))
+// 		len = 0;
+// 	sub = ft_calloc(len + 1, 1);
+// 	if (sub == 0)
+// 		return (0);
+// 	i = start;
+// 	if (len == 0)
+// 		return (sub);
+// 	while (s[i] != '\0' && (i - start) < len)
+// 	{
+// 		sub[i - start] = s[i];
+// 		i++;
+// 	}
+// 	return (sub);
+// }
 
 static char	*freebufs(int free1, int free2, char *buffer1, char *buffer2)
 {
@@ -49,7 +49,7 @@ static char	*setline(char *linebuf, char *leftovers) // not freeing leftovers he
 	char *cursor;
 	
 	cursor = linebuf;
-	while (cursor != '\n' && cursor != '\0')
+	while (*cursor != '\n' && *cursor != '\0')
 		cursor++;
 	free(leftovers); // free old leftovers
 	if (*cursor == '\n')
@@ -58,11 +58,11 @@ static char	*setline(char *linebuf, char *leftovers) // not freeing leftovers he
 		*(cursor + 1) = '\0';
 	}	
 	else if (*cursor == '\0')
-		leftovers = ""; // no strdup so freeing isn't necessary right after this
+		leftovers = ft_strdup(""); // no strdup so freeing isn't necessary right after this
 	if (leftovers == 0) // handle error here to not have to add lines to gnl
 		free(linebuf);
 	return (leftovers); // if leftovers = 0, then this value will just be returned here.
-} // return 0 ONLY on error here and empty-string if eof.  Have a check outside to reassign leftovers to 0 if empty. Freeing the old leftovers.
+} // return 0 ONLY on error here and empty-string if last line.  Have a check outside to reassign leftovers to 0 if empty. (no need to free old one)
 
 static char	*buildlinebuf(char *leftovers, int fd, int *eofptr)
 {
@@ -86,8 +86,7 @@ static char	*buildlinebuf(char *leftovers, int fd, int *eofptr)
 			nlfound = 1;
 		if (bytesread > 0)
 			leftovers = ft_strjoin(leftovers, buffer); // buffer and leftovers freed here in the case where buffer is non-empty
-		else
-			free(buffer); // if buffer is empty, just free it and keep leftovers as is.
+		free(buffer); // if buffer is empty, just free it and keep leftovers as is.
 	}
 	return (leftovers);
 }
@@ -108,7 +107,11 @@ char	*get_next_line(int fd)
 	else if ((eof == 1 && leftovers == 0) || fd < 0)
 		return (0);
 	if (leftinit++ == 0)
-		leftovers = ft_strdup(""); // handle error!!!!!!!!!!!!!
+	{
+		leftovers = ft_strdup("");
+		if (leftovers == 0)
+			return (0);
+	}
 	linebuf = buildlinebuf(leftovers, fd, &eof);
 	if (linebuf == 0)
 		return (0);  // might not have to free leftovers here bc if first read error, old leftovers freed.  If not, old leftovers freed after appending.
@@ -116,11 +119,11 @@ char	*get_next_line(int fd)
 	if (leftovers == 0)
 		return (0);  // no need to free linebuf bc already done in setline
 	else if (*leftovers == '\0') // if empty
-		leftovers = 0;
+		leftovers = freebufs(1, 0, leftovers, 0);
 	return (linebuf);
 }
 
-/*
+
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -132,7 +135,8 @@ int	main(void)
 	{
 		linebuf = get_next_line(fd);
 		printf("%s", linebuf);
-		free(linebuf);
+		if (linebuf != 0)
+			free(linebuf);
 	}
 	close(fd);
-}*/
+}

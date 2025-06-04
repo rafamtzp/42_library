@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:22:21 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/06/04 17:02:58 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:35:54 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,8 @@ char	*ft_strjoin(char const *s1, char const *s2) // added free
 		s3[i + j] = s2[j];
 		j++;
 	}
-	//s3[i + j] = '\0';
-	free(s1);
-	free(s2);
+	s3[i + j] = '\0';
+	free((char *)s1);
 	return (s3);
 }
 
