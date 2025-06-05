@@ -6,11 +6,78 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:22:21 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/06/05 14:08:27 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:21:36 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlen(char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (*s != '\0')
+	{
+		len++;
+		s++;
+	}
+	return (len);
+}
+
+char	*ft_strdup(char *s)
+{
+	char			*ptr;
+	size_t			len;
+	size_t			i;
+	unsigned char	*ptr1;
+	unsigned char	*ptr2;
+
+	len = ft_strlen(s);
+	ptr = malloc(len + 1);
+	if (ptr == 0)
+		return (0);
+	if (ptr == 0 && s == 0 && len + 1 > 0)
+		return (0);
+	ptr1 = (unsigned char *)s;
+	ptr2 = (unsigned char *)ptr;
+	i = 0;
+	while (i < len + 1)
+	{
+		*ptr2 = *ptr1;
+		ptr1++;
+		ptr2++;
+		i++;
+	}
+	return (ptr);
+}
+
+char	*ft_strjoin(char *s1, char *s2) // free s1 added
+{
+	char	*s3;
+	int		i;
+	int		j;
+
+	s3 = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (s3 == 0)
+		return (0);
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		s3[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j] != '\0')
+	{
+		s3[i + j] = s2[j];
+		j++;
+	}
+	s3[i + j] = '\0';
+	free(s1);
+	s1 = NULL;
+	return (s3);
+}
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
@@ -41,74 +108,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (*s != '\0')
-	{
-		len++;
-		s++;
-	}
-	return (len);
-}
-
-char	*ft_strdup(const char *s)
-{
-	char			*ptr;
-	size_t			len;
-	size_t			i;
-	unsigned char	*ptr1;
-	unsigned char	*ptr2;
-
-	len = ft_strlen(s);
-	ptr = malloc(len + 1);
-	if (ptr == 0)
-		return (0);
-	if (ptr == 0 && s == 0 && len + 1 > 0)
-		return (0);
-	ptr1 = (unsigned char *)s;
-	ptr2 = (unsigned char *)ptr;
-	i = 0;
-	while (i < len + 1)
-	{
-		*ptr2 = *ptr1;
-		ptr1++;
-		ptr2++;
-		i++;
-	}
-	return (ptr);
-}
-
-char	*ft_strjoin(char *s1, char *s2) // added free
-{
-	char	*s3;
-	int		i;
-	int		j;
-
-	s3 = ft_calloc(1, ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (s3 == 0)
-		return (0);
-	i = 0;
-	while (s1[i] != '\0')
-	{
-		s3[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (s2[j] != '\0')
-	{
-		s3[i + j] = s2[j];
-		j++;
-	}
-	s3[i + j] = '\0';
-	return (s3);
-}
-
-
-
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
 	char	*ptr;
 

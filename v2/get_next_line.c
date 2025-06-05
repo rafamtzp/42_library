@@ -130,7 +130,7 @@ char	*get_next_line(int fd)
 	return (linebuf);
 }
 
-/*
+
 #include <fcntl.h>
 #include <stdio.h>
 
@@ -145,4 +145,4 @@ int	main(void)
 		free(linebuf);
 	}
 	close(fd);
-}*/
+}

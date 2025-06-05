@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:11:01 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/06/04 18:41:32 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:21:33 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,20 @@
 // 	return (sub);
 // }
 
-static char	*freebufs(int free1, int free2, char *buffer1, char *buffer2)
-{
-	if (free1 == 1)
-		free(buffer1);
-	if (free2 == 1)
-		free(buffer2);
-	return (0);
-}
+// static char	*freebufs(char *buffer1, char *buffer2)
+// {
+// 	if (buffer1)
+// 	{
+// 		free(buffer1);
+// 		buffer1 = NULL;
+// 	}
+// 	if (buffer2)
+// 	{
+// 		free(buffer2);
+// 		buffer2 = NULL;
+// 	}
+// 	return (0);
+// }
 
 static char	*setline(char *linebuf) // not freeing leftovers here properly??
 {
@@ -71,21 +77,23 @@ static char	*buildlinebuf(char *leftovers, int fd, int *eofptr)
 
 	bytesread = 0;
 	nlfound = 0;
+	if (fd < 0)
+		return (0);
 	while (*eofptr == 0 && nlfound == 0)
 	{
 		buffer = ft_calloc(1, BUFFER_SIZE + 1);
 		if (buffer == 0)
-			return (freebufs(1, 0, leftovers, 0));  // free THIS leftovers (which is the linebuf) here!
+			return (0);  // free THIS leftovers (which is the linebuf) here!
 		bytesread = read(fd, buffer, BUFFER_SIZE);
 		if (bytesread == -1)
-			return (freebufs(1, 1, buffer, leftovers)); // free buffer and leftovers here!!
+			return (0); // free buffer and leftovers here!!
 		else if (bytesread < BUFFER_SIZE && bytesread >= 0)
 			*eofptr = 1;
 		if (ft_strchr(buffer, '\n') != 0)
 			nlfound = 1;
 		if (bytesread > 0)
 			leftovers = ft_strjoin(leftovers, buffer); // buffer and leftovers freed here in the case where buffer is non-empty
-		free(buffer); // if buffer is empty, just free it and keep leftovers as is.
+		//free(buffer); // if buffer is empty, just free it and keep leftovers as is.
 	}
 	return (leftovers);
 }
@@ -94,50 +102,44 @@ char	*get_next_line(int fd)
 {
 	char *linebuf;
 
-	static char	*leftovers;
+	static char	*leftovers = 0;
 	static int eof = 0;
-	static int leftinit = 0;
+	// static int leftinit = 0;
 	if (fd < 0 || (eof == 1 && leftovers == 0))
 		return (0);
-	if (leftinit++ == 0)
+	if (leftovers == 0)
 	{
 		leftovers = ft_strdup("");
 		if (leftovers == 0)
 			return (0);
 	}
-	else if (eof == 1 && *leftovers != '\0') // it is given that if leftovers isnt NULL, then it's nonempty (double check this!!!!!!)
-	{
-		linebuf = leftovers;  // dont free old leftovers bc that is what is being returned!
-		return (linebuf);
-	}
+	else if (eof == 1 && leftovers != 0)
+		return (leftovers);
 	linebuf = buildlinebuf(leftovers, fd, &eof);
 	if (linebuf == 0)
 		return (0);  // might not have to free leftovers here bc if first read error, old leftovers freed.  If not, old leftovers freed after appending.
 	leftovers = setline(linebuf); // we add old leftovers as parameter to free it before reassigning.....
 	if (leftovers == 0)
 		return (0);  // no need to free linebuf bc already done in setline
-	else if (eof == 1 && *leftovers == '\0')
-	{
-		free(leftovers);
-		leftovers = 0;
-	}
+	// else if (eof == 1 && *leftovers == '\0')
+	// 	free(leftovers);
 	return (linebuf);
 }
 
 
-// #include <fcntl.h>
-// #include <stdio.h>
+#include <fcntl.h>
+#include <stdio.h>
 
-// int	main(void)
-// {
-// 	char *linebuf;
-// 	int fd = open("file.txt", O_RDONLY);
-// 	for (int i = 1; i <= 50; i++)
-// 	{
-// 		linebuf = get_next_line(fd);
-// 		printf("%s", linebuf);
-// 		if (linebuf != 0)
-// 			free(linebuf);
-// 	}
-// 	close(fd);
-// }
+int	main(void)
+{
+	char *linebuf;
+	int fd = open("file.txt", O_RDONLY);
+	for (int i = 1; i <= 50; i++)
+	{
+		linebuf = get_next_line(fd);
+		printf("%s", linebuf);
+		if (linebuf != 0)
+			free(linebuf);
+	}
+	close(fd);
+}
