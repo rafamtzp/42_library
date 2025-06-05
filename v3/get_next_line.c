@@ -44,14 +44,15 @@ static char	*freebufs(int free1, int free2, char *buffer1, char *buffer2)
 	return (0);
 }
 
-static char	*setline(char *linebuf, char *leftovers) // not freeing leftovers here properly??
+static char	*setline(char *linebuf) // not freeing leftovers here properly??
 {
 	char *cursor;
+	char *leftovers;
 	
 	cursor = linebuf;
+	leftovers = 0;
 	while (*cursor != '\n' && *cursor != '\0')
 		cursor++;
-	free(leftovers); // free old leftovers
 	if (*cursor == '\n')
 	{
 		leftovers = ft_strdup(cursor + 1);
@@ -59,8 +60,6 @@ static char	*setline(char *linebuf, char *leftovers) // not freeing leftovers he
 	}	
 	else if (*cursor == '\0')
 		leftovers = ft_strdup(""); // no strdup so freeing isn't necessary right after this
-	if (leftovers == 0) // handle error here to not have to add lines to gnl
-		free(linebuf);
 	return (leftovers); // if leftovers = 0, then this value will just be returned here.
 } // return 0 ONLY on error here and empty-string if last line.  Have a check outside to reassign leftovers to 0 if empty. (no need to free old one)
 
@@ -95,16 +94,10 @@ char	*get_next_line(int fd)
 {
 	char *linebuf;
 
-	static char	*leftovers = 0;
+	static char	*leftovers;
 	static int eof = 0;
 	static int leftinit = 0;
-	if (eof == 1 && leftovers != 0) // it is given that if leftovers isnt NULL, then it's nonempty (double check this!!!!!!)
-	{
-		linebuf = leftovers;  // dont free old leftovers bc that is what is being returned!
-		leftovers = 0;
-		return (linebuf);
-	}
-	else if ((eof == 1 && leftovers == 0) || fd < 0)
+	if (fd < 0 || (eof == 1 && leftovers == 0))
 		return (0);
 	if (leftinit++ == 0)
 	{
@@ -112,31 +105,39 @@ char	*get_next_line(int fd)
 		if (leftovers == 0)
 			return (0);
 	}
+	else if (eof == 1 && *leftovers != '\0') // it is given that if leftovers isnt NULL, then it's nonempty (double check this!!!!!!)
+	{
+		linebuf = leftovers;  // dont free old leftovers bc that is what is being returned!
+		return (linebuf);
+	}
 	linebuf = buildlinebuf(leftovers, fd, &eof);
 	if (linebuf == 0)
 		return (0);  // might not have to free leftovers here bc if first read error, old leftovers freed.  If not, old leftovers freed after appending.
-	leftovers = setline(linebuf, leftovers); // we add old leftovers as parameter to free it before reassigning.....
+	leftovers = setline(linebuf); // we add old leftovers as parameter to free it before reassigning.....
 	if (leftovers == 0)
 		return (0);  // no need to free linebuf bc already done in setline
-	else if (*leftovers == '\0') // if empty
-		leftovers = freebufs(1, 0, leftovers, 0);
+	else if (eof == 1 && *leftovers == '\0')
+	{
+		free(leftovers);
+		leftovers = 0;
+	}
 	return (linebuf);
 }
 
 
-#include <fcntl.h>
-#include <stdio.h>
+// #include <fcntl.h>
+// #include <stdio.h>
 
-int	main(void)
-{
-	char *linebuf;
-	int fd = open("file.txt", O_RDONLY);
-	for (int i = 1; i <= 50; i++)
-	{
-		linebuf = get_next_line(fd);
-		printf("%s", linebuf);
-		if (linebuf != 0)
-			free(linebuf);
-	}
-	close(fd);
-}
+// int	main(void)
+// {
+// 	char *linebuf;
+// 	int fd = open("file.txt", O_RDONLY);
+// 	for (int i = 1; i <= 50; i++)
+// 	{
+// 		linebuf = get_next_line(fd);
+// 		printf("%s", linebuf);
+// 		if (linebuf != 0)
+// 			free(linebuf);
+// 	}
+// 	close(fd);
+// }

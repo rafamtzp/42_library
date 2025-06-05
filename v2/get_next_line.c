@@ -122,7 +122,7 @@ char	*get_next_line(int fd)
 		return (0);
 	leftovers = setline(linebuf);
 	if (leftovers == 0)
-		return (freebufs(1, 0, linebuf, leftovers));
+		return (0);
 	if (eof == 1 && *leftovers == '\0')
 		free(leftovers);
 	// if (eof == 1 && ft_strlen(linebuf) == 0)  // what is this for????????
