@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:11:01 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/06/05 18:52:43 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:31:10 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,16 @@ char	*get_next_line(int fd)
 			return (leftovers = freebuf(leftovers));
 		return (0);
 	}
-	if (leftovers != NULL && eof == 1) // recortado por invalid read
-		return (leftovers);
+	if (leftovers != NULL && eof == 1)  // problem here bc in case where leftovers=\n\n|n, I was returning all in one call
+	{
+		linebuf = leftovers;
+		leftovers = setline(linebuf);
+		if (leftovers == 0)
+			return (0);
+		else if (*leftovers == '\0')
+			leftovers = freebuf(leftovers);
+		return (linebuf);
+	}
 	if (leftovers == NULL)
 		leftovers = ft_strdup("");
 	linebuf = appendbufs(leftovers, fd, &eof, &readcount);
@@ -104,18 +112,18 @@ char	*get_next_line(int fd)
 }
 
 
-// #include <fcntl.h>
-// #include <stdio.h>
+#include <fcntl.h>
+#include <stdio.h>
 
-// int	main(void)
-// {
-// 	char *linebuf;
-// 	int fd = open("file.txt", O_RDONLY);
-// 	for (int i = 1; i <= 2; i++)
-// 	{
-// 		linebuf = get_next_line(fd);
-// 		printf("%s", linebuf);
-// 		free(linebuf);
-// 	}
-// 	close(fd);
-// }
+int	main(void)
+{
+	char *linebuf;
+	int fd = open("read_error.txt", O_RDONLY);
+	for (int i = 1; i <= 9; i++)
+	{
+		linebuf = get_next_line(fd);
+		printf("%s", linebuf);
+		free(linebuf);
+	}
+	close(fd);
+}
