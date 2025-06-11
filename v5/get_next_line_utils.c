@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 14:22:21 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/06/05 14:08:27 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:24:37 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	s3[i + j] = '\0';
 	return (s3);
 }
-
-
 
 char	*ft_strchr(const char *s, int c)
 {
