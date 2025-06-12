@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 17:22:44 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/06/11 17:23:14 by ramarti2         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:55:50 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char	*freebuf(char **ptr)
 {
-	if (*ptr != NULL)
+	if (*ptr != NULL && ptr != NULL)
 	{
 		free(*ptr);
 		*ptr = NULL;
@@ -76,7 +76,8 @@ char	*get_next_line(int fd)
 	char		*linebuf;
 	static char	*leftovers;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	linebuf = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, NULL, 0) < 0)
 		return (freebuf(&leftovers));
 	buffer = ft_calloc(1, BUFFER_SIZE + 1);
 	if (!buffer)
@@ -92,8 +93,75 @@ char	*get_next_line(int fd)
 		freebuf(&leftovers);
 	return (linebuf);
 }
-/*
+
+/*#include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+
+int next_read_error = 0;
+
+int main(void)
+{
+    int fd = open("read_error.txt", O_RDONLY);
+    char *line;
+
+    // Lecturas normales
+    line = get_next_line(fd); printf("L1: %s", line); free(line);
+    line = get_next_line(fd); printf("L2: %s", line); free(line);
+
+    // Simular fallo de read()
+    next_read_error = 1;
+	close(fd);
+    line = get_next_line(fd);
+    if (line == NULL)
+        printf("L3: read() failed correctly.\n");
+    else
+    {
+        printf("ERROR: debería devolver NULL\n");
+        free(line);
+    }
+    next_read_error = 0;
+    close(fd);
+
+    // Reabrimos el archivo (para reproducir el comportamiento de los tests)
+    fd = open("read_error.txt", O_RDONLY);
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("Line: %s", line);
+        free(line);
+    }
+    close(fd);
+
+    return 0;
+}*/
+
+
 #include <fcntl.h>
+#include <stdio.h>
+int	main(void)
+{
+	char *linebuf;
+	int fd = open("read_error.txt", O_RDONLY);
+	
+	linebuf = get_next_line(fd);
+	printf("linea 1: %s", linebuf);
+	free(linebuf);
+	
+	close(fd);
+	linebuf = get_next_line(fd);
+	printf("linea 2: %s", linebuf);
+	//free(linebuf);
+
+	linebuf = get_next_line(fd);
+	printf("linea 3: %s", linebuf);
+	//free(linebuf);
+
+	
+	
+}	
+
+/*#include <fcntl.h>
 #include <stdio.h>
 
 int	main(void)
