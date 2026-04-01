@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/01 00:00:00 by                   #+#    #+#             */
-/*   Updated: 2026/04/01 18:46:54 by ramarti2         ###   ########.fr       */
+/*   Created: 2025/05/29 14:30:15 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/06/12 16:55:30 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
+# include <stdlib.h>
+# include <unistd.h>
 
-# include "libft/libft.h"
-# include "ft_printf/ft_printf.h"
-# include "get_next_line/gnl_bonus/get_next_line_bonus.h"
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1000000
+# endif
 
-// NOTE TO SELF: Remember to add #include for other/ if I ever add any functions to it!
+size_t	ft_strlen(const char *s);
+void	*ft_calloc(size_t nmemb, size_t size);
+char	*ft_strdup(const char *s);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strchr(const char *s, int c);
+char	*get_next_line(int fd);
 
 #endif

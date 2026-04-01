@@ -1,22 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/01 00:00:00 by                   #+#    #+#             */
-/*   Updated: 2026/04/01 18:46:54 by ramarti2         ###   ########.fr       */
+/*   Created: 2025/05/02 21:08:30 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/12 10:33:25 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
+{
+	unsigned int	i;
 
-# include "libft/libft.h"
-# include "ft_printf/ft_printf.h"
-# include "get_next_line/gnl_bonus/get_next_line_bonus.h"
+	i = 0;
+	while (s[i])
+	{
+		f(i, &s[i]);
+		i++;
+	}
+	return ;
+}
+/*
+void	func(unsigned int i, char *c)
+{
+	if (*c >= 'a' && *c <= 'z' && i % 2 == 1)
+		*c = 'x';
+	return ;
+}
+#include <stdio.h>
 
-// NOTE TO SELF: Remember to add #include for other/ if I ever add any functions to it!
-
-#endif
+int	main(void)
+{
+	char s[] = "hello, world";
+	ft_striteri(s, func);
+	printf("%s\n", s);
+}*/
