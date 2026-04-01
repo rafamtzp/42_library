@@ -1,22 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/01 00:00:00 by                   #+#    #+#             */
-/*   Updated: 2026/04/01 18:46:54 by ramarti2         ###   ########.fr       */
+/*   Created: 2025/03/27 14:17:13 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/12 10:33:09 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "ft_printf/ft_printf.h"
-# include "get_next_line/gnl_bonus/get_next_line_bonus.h"
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
 
-// NOTE TO SELF: Remember to add #include for other/ if I ever add any functions to it!
+	len = 0;
+	while (*s != '\0')
+	{
+		len++;
+		s++;
+	}
+	return (len);
+}
+/*
+#include <stdio.h>
+#include <string.h>
 
-#endif
+size_t	ft_strlen(const char *str);
+
+int	main(void){
+	const char *s = "Hello";
+	printf("%zu\n", ft_strlen(s));
+
+}
+*/

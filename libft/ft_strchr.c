@@ -1,22 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/01 00:00:00 by                   #+#    #+#             */
-/*   Updated: 2026/04/01 18:46:54 by ramarti2         ###   ########.fr       */
+/*   Created: 2025/05/02 21:09:36 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/12 10:33:42 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+char	*ft_strchr(const char *s, int c)
+{
+	char	*ptr;
 
-# include "libft/libft.h"
-# include "ft_printf/ft_printf.h"
-# include "get_next_line/gnl_bonus/get_next_line_bonus.h"
+	ptr = (char *)s;
+	while (*ptr)
+	{
+		if (*ptr == (char)c)
+			return (ptr);
+		ptr++;
+	}
+	if ((char)c == '\0')
+		return (ptr);
+	return (0);
+}
+/*
+#include <stdio.h>
 
-// NOTE TO SELF: Remember to add #include for other/ if I ever add any functions to it!
+int	main(void)
+{
+	char *s = "hello, world";
+	char c = '\0';
 
-#endif
+	printf("s: %p, c in s: %p\n", s, ft_strchr(s, c));
+}*/

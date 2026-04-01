@@ -1,22 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/01 00:00:00 by                   #+#    #+#             */
-/*   Updated: 2026/04/01 18:46:54 by ramarti2         ###   ########.fr       */
+/*   Created: 2025/05/02 21:13:06 by ramarti2          #+#    #+#             */
+/*   Updated: 2025/05/12 10:35:40 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include "ft_printf/ft_printf.h"
-# include "get_next_line/gnl_bonus/get_next_line_bonus.h"
+void	*ft_memset(void *s, int c, size_t n)
+{
+	size_t			i;
+	unsigned char	*ptr;
 
-// NOTE TO SELF: Remember to add #include for other/ if I ever add any functions to it!
+	ptr = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		*ptr = c;
+		ptr++;
+		i++;
+	}
+	return (s);
+}
+/*
+#include <stdio.h>
 
-#endif
+int	main(void)
+{
+	unsigned int i = 0;
+	size_t n = 4;
+	char s[100];
+	ft_memset(s, 'x', n);
+	while (i < n)
+	{
+		printf("%c\n", s[i]);
+		i++;
+	}
+}*/
