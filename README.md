@@ -27,7 +27,7 @@ This repository reflects a structured and modular approach to C development, emp
 
 ### 🧱 libft
 
-**libft** is a custom implementation of standard C library functions, along with additional utility functions.
+**libft** is a custom implementation of standard C library functions, along with additional utility functions.  This was the very first project I did at 42 in milestone 0.
 
 #### Goals:
 
@@ -42,17 +42,34 @@ This repository reflects a structured and modular approach to C development, emp
 * Linked list utilities
 * Character checks and conversions
 
+#### Functions:
+##### int <-> string conversion functions
+* ft_atoi, ft_itoa
+##### "What is it?" functions
+* ft_isalnum, ft_isalpha, ft_isascii, ft_isdigit, ft_isprint
+##### Memory handling functions
+* ft_calloc, ft_memcmp, ft_bzero, ft_memchr, ft_memcpy, ft_memmove, ft_memset
+##### put<type> functions (print different data types to stdout)
+* ft_putchar_fd, ft_putendl_fd, ft_putnbr_fd, ft_putstr
+##### String manipulation functions
+* ft_strncmp, ft_striteri, ft_split, ft_strchr, ft_strdup
+* ft_strjoin, ft_strmapi, ft_strnstr, ft_strrchr, ft_strtrim
+* ft_substr, ft_strlcat, ft_strlcpy, ft_strlen
+* ft_tolower, ft_toupper (these manipulate a single char)
+##### Linked list functions (bonus)
+* ft_lstsize, ft_lstadd_front, ft_lstadd_back, ft_lstiter
+* ft_lstdelone, ft_lstclear, ft_lstnew, ft_lstlast, ft_lstmap
 ---
 
 ### 🖨️ ft_printf
 
-**ft_printf** is a reimplementation of the standard `printf` function.
+**ft_printf** is a reimplementation of the standard `printf` function.  This project was a part of milestone 1.
 
 #### Goals:
 
-* Understand variadic functions
+* Understand variadic functions (functions with optional arguments)
 * Handle formatted output
-* Manage complex parsing logic
+* Manage parsing logic
 
 #### Features:
 
@@ -66,7 +83,9 @@ This repository reflects a structured and modular approach to C development, emp
 
 ### 📡 get_next_line
 
-**get_next_line** is a function that reads a file descriptor line by line.
+**get_next_line** is a function that reads a file descriptor line by line. The function returns a single line read from a file.  Next time you call it, it returns the next line and so on until it's done reading from the file.
+
+This project was also part of milestone 1.
 
 #### Goals:
 
@@ -77,8 +96,10 @@ This repository reflects a structured and modular approach to C development, emp
 #### Features:
 
 * Reads one line at a time from a file descriptor
-* Works with multiple file descriptors simultaneously (bonus)
+* Works with multiple file descriptors simultaneously (bonus version inside gnl_bonus/)
 * Efficient buffering system
+
+Note: Both the base and bonus versions of get_next_line are present in the repository inside ./get_next_line/gnl/ and ./get_next_line/gnl_bonus, respectively.  By default, running `make` will only compile the bonus version.
 
 ---
 
@@ -88,13 +109,13 @@ This repository reflects a structured and modular approach to C development, emp
 
 To compile the full library:
 
-```bash id="d2w8sa"
+```bash
 make
 ```
 
 This will generate:
 
-```bash id="a1x7kp"
+```bash
 libft.a
 ```
 
@@ -102,11 +123,11 @@ libft.a
 
 ### 🧩 Project Structure
 
-```id="r3k9tm"
+```
 .
 ├── libft/            # Original libft project
 ├── ft_printf/        # ft_printf implementation
-├── get_next_line/    # get_next_line (including bonus if present)
+├── get_next_line/    # get_next_line (including bonus)
 ├── obj/              # Compiled object files (temporary)
 └── other/			  # folder where I can add extra functions to expand my library
 ├── Makefile
@@ -119,21 +140,21 @@ libft.a
 
 Include the header in your project:
 
-```c id="c9x2ls"
+```c
 #include "libft.h"
 ```
 
 Compile with:
 
-```bash id="p4z7vd"
+```bash
 cc main.c libft.a
 ```
 
 ---
 
-### 🧹 Rules
+### 🧹 Makefile Rules
 
-```bash id="m8q2yf"
+```bash
 make        # build library
 make clean  # remove object files
 make fclean # remove objects + library
@@ -160,14 +181,7 @@ Across these three projects, the following core programming concepts were develo
 ### C Programming
 
 * Standard C Library documentation (`man` pages)
-* Memory management and pointers
-* Variadic functions (`stdarg.h`)
-
-### Project-Specific Topics
-
-* String and memory manipulation (libft)
-* Formatted output and parsing (ft_printf)
-* File reading and buffering (get_next_line)
+* Internet articles on Variadic functions (`stdarg.h`)
 
 ---
 

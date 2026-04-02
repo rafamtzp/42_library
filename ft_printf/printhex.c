@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:30:09 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/20 18:23:23 by ramarti2         ###   ########.fr       */
+/*   Updated: 2026/04/02 12:09:50 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	printhex(unsigned int num, char format)
 	count = 0;
 	while (num != 0)
 	{
-		if (num % 16 >= 0 && num % 16 <= 9)
+		if (num % 16 <= 9)
 			arr[count++] = num % 16 + '0';
 		else if (format == 'X')
 			arr[count++] = 'A' + (num % 16 - 10);

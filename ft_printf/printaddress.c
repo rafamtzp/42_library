@@ -6,7 +6,7 @@
 /*   By: ramarti2 <ramarti2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 15:29:35 by ramarti2          #+#    #+#             */
-/*   Updated: 2025/05/21 15:56:23 by ramarti2         ###   ########.fr       */
+/*   Updated: 2026/04/02 12:08:56 by ramarti2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	printaddress(void *ptr)
 	count = 1;
 	while (num != 0)
 	{
-		if (num % 16 >= 0 && num % 16 <= 9)
+		if (num % 16 <= 9)
 			arr[count++] = num % 16 + '0';
 		else
 			arr[count++] = 'a' + (num % 16 - 10);
